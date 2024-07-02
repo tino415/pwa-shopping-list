@@ -1,26 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+
+import './App.css'
+import NewShoppingList from './containers/NewShoppingList'
+import ShoppingList from './containers/ShoppingList'
+import ShoppingLists from './containers/ShoppingLists'
+import NewShoppingListItem from './containers/NewShoppingListItem'
+import EditShoppingList from './containers/EditShoppingList'
+import EditShoppingListItem from './containers/EditShoppingListItem'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Router>
+      <div className="container mx-auto">
+        <Routes>
+          <Route path="/" Component={ShoppingLists} />
+          <Route path="/new" Component={NewShoppingList} />
+          <Route path="/:id" Component={ShoppingList} />
+          <Route path="/:id/edit" Component={EditShoppingList} />
+          <Route path="/:id/new" Component={NewShoppingListItem} />
+          <Route
+            path="/:shoppingListId/:id/edit"
+            Component={EditShoppingListItem}
+          />
+        </Routes>
+      </div>
+    </Router>
+  )
 }
 
-export default App;
+export default App
