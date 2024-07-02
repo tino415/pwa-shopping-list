@@ -36,6 +36,7 @@ import {
 } from '../lib/db'
 
 import DropdownItemDelete from '../components/ui/DropdownItemDelete'
+import Header from '../components/ui/Header'
 
 function ShoppingLists() {
   const [shoppingLists, setShoppingLists] = useState<ShoppingList[]>([])
@@ -63,7 +64,9 @@ function ShoppingLists() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <LinkNew to={'/new'}/>
+      <Header name="">
+        <LinkNew to={'/new'}/>
+      </Header>
       <Table>
         <TableCaption>Your shopping lists</TableCaption>
         <TableHeader>

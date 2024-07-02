@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+
+import ShoppingListItemForm, { type InputData } from '../components/ShoppingListItemForm'
 
 import {
   createShoppingListItem,
@@ -10,18 +9,7 @@ import {
   type ShoppingList as List,
 } from '../lib/db'
 
-import { Button } from '../components/ui/Button'
 import LinkCancel from '../components/ui/LinkCancel'
-
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '../components/ui/Form'
 
 import {
   Breadcrumb,
@@ -32,13 +20,7 @@ import {
   BreadcrumbSeparator,
 } from '../components/ui/Breadcrumb'
 
-import { Input } from '../components/ui/Input'
-
-const formSchema = z.object({
-  name: z.string().min(2, {
-    message: 'Name must be at least 2 characters.',
-  }),
-})
+import Header from '../components/ui/Header'
 
 function NewShoppingListItem() {
   const navigate = useNavigate()
@@ -53,14 +35,7 @@ function NewShoppingListItem() {
     }
   }, [id])
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: '',
-    },
-  })
-
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: InputData) {
     if (id) {
       createShoppingListItem({ ...values, shoppingListId: parseInt(id) })
       navigate(`/${id}`)
@@ -86,28 +61,10 @@ function NewShoppingListItem() {
           </BreadcrumbList>
         </Breadcrumb>
 
-        <h1>{shoppingList.name} item</h1>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="shadcn" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    This is your public display name.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit">Submit</Button>
-          </form>
-        </Form>
+        <Header name={`Add new shopping list item to ${shoppingList.name}`}></Header>
+
+        <ShoppingListItemForm onSubmit={onSubmit}/>
+
         <LinkCancel to={`/${id}`}/>
       </>
     )

@@ -43,6 +43,7 @@ import {
 import LinkNew from '../components/ui/LinkNew'
 import LinkEdit from '../components/ui/LinkEdit'
 import ButtonDelete from '../components/ui/ButtonDelete'
+import Header from '../components/ui/Header'
 
 function ShoppingList() {
   const navigate = useNavigate()
@@ -93,13 +94,11 @@ function ShoppingList() {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <LinkNew to={`/${shoppingList.id}/new`}/>
-        <LinkEdit to={`/${shoppingList.id}/edit`}/>
-        <ButtonDelete onDelete={() => submitDeleteShoppingList(shoppingList.id)}/>
-        <ul>
-          <li>{shoppingList.id}</li>
-          <li>{shoppingList.name}</li>
-        </ul>
+        <Header name={shoppingList.name}>
+          <LinkNew to={`/${shoppingList.id}/new`}/>
+          <LinkEdit to={`/${shoppingList.id}/edit`}/>
+          <ButtonDelete onDelete={() => submitDeleteShoppingList(shoppingList.id)}/>
+        </Header>
         <Table>
           <TableCaption>Shopping list items</TableCaption>
           <TableHeader>
