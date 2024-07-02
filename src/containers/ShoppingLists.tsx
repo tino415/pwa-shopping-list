@@ -20,6 +20,7 @@ import {
 
 import { Button } from '../components/ui/Button'
 import ButtonDelete from '../components/ui/ButtonDelete'
+import LinkNew from '../components/ui/LinkNew'
 
 import {
   listShoppingLists,
@@ -53,9 +54,7 @@ function ShoppingLists() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <Button>
-        <Link to="/new">Add</Link>
-      </Button>
+      <LinkNew to={'/new'}/>
       <Table>
         <TableCaption>Your shopping lists</TableCaption>
         <TableHeader>
@@ -74,7 +73,7 @@ function ShoppingLists() {
                 <Button>
                   <Link to={`/${list.id}`}>Show</Link>
                 </Button>
-                <ButtonDelete onClick={() => submitDeleteShoppingList(list.id)}/>
+                <ButtonDelete onDelete={() => submitDeleteShoppingList(list.id)}/>
               </TableCell>
             </TableRow>
           ))}

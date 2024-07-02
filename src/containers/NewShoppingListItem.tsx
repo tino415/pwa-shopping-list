@@ -62,7 +62,7 @@ function NewShoppingListItem() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     if (id) {
-      createShoppingListItem({ ...values, shoppingListId: id })
+      createShoppingListItem({ ...values, shoppingListId: parseInt(id) })
       navigate(`/${id}`)
     }
   }

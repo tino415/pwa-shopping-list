@@ -13,7 +13,7 @@ type UpdateShoppingListParams = {
 
 type CreateShoppingListItemParams = {
   name: string
-  shoppingListId: string
+  shoppingListId: number
 }
 
 export type ShoppingList = {

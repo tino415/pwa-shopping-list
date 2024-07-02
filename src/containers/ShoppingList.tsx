@@ -31,6 +31,9 @@ import {
   BreadcrumbSeparator,
 } from '../components/ui/Breadcrumb'
 
+import LinkNew from '../components/ui/LinkNew'
+import LinkEdit from '../components/ui/LinkEdit'
+
 function ShoppingList() {
   const { id } = useParams()
   const [shoppingList, setShoppingList] = useState<List | null>(null)
@@ -73,10 +76,8 @@ function ShoppingList() {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <Button>
-          <Link to={`/${shoppingList.id}/new`}>New</Link>
-        </Button>
-        <Link className={buttonVariants()} to={`/${shoppingList.id}/edit`}>Edit</Link>
+        <LinkNew to={`/${shoppingList.id}/new`}/>
+        <LinkEdit to={`/${shoppingList.id}/edit`}/>
         <ul>
           <li>{shoppingList.id}</li>
           <li>{shoppingList.name}</li>
@@ -97,7 +98,7 @@ function ShoppingList() {
                   <Link className={buttonVariants()} to={`/${shoppingList.id}/${item.id}/edit`}>
                     Edit
                   </Link>
-                  <ButtonDelete onClick={() => submitDeleteShoppingListItem(item.id)}/>
+                  <ButtonDelete onDelete={() => submitDeleteShoppingListItem(item.id)}/>
                 </TableCell>
               </TableRow>
             ))}
