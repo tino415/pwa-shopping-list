@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
+import { EllipsisVertical } from 'lucide-react'
+
 import {
   Table,
   TableBody,
@@ -18,8 +20,13 @@ import {
   BreadcrumbPage,
 } from '../components/ui/Breadcrumb'
 
-import { Button } from '../components/ui/Button'
-import ButtonDelete from '../components/ui/ButtonDelete'
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from '../components/ui/DropdownMenu'
+
 import LinkNew from '../components/ui/LinkNew'
 
 import {
@@ -27,6 +34,8 @@ import {
   deleteShoppingList,
   type ShoppingList,
 } from '../lib/db'
+
+import DropdownItemDelete from '../components/ui/DropdownItemDelete'
 
 function ShoppingLists() {
   const [shoppingLists, setShoppingLists] = useState<ShoppingList[]>([])
@@ -37,7 +46,7 @@ function ShoppingLists() {
     })
   })
 
-  async function submitDeleteShoppingList(id: string) {
+  async function submitDeleteShoppingList(id: number) {
     deleteShoppingList(id).then(() => {
       listShoppingLists().then((lists) => {
         setShoppingLists(lists)
@@ -60,20 +69,29 @@ function ShoppingLists() {
         <TableHeader>
           <TableRow>
             <TableHead>Name</TableHead>
-            <TableHead className="w-[100px]">Progress</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {shoppingLists.map((list) => (
             <TableRow key={list.id}>
-              <TableCell className="font-medium">{list.name}</TableCell>
-              <TableCell>100%</TableCell>
+              <TableCell className="font-medium">
+                <Link to={`/${list.id}`}>{list.name}</Link>
+              </TableCell>
               <TableCell className="text-right">
-                <Button>
-                  <Link to={`/${list.id}`}>Show</Link>
-                </Button>
-                <ButtonDelete onDelete={() => submitDeleteShoppingList(list.id)}/>
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <EllipsisVertical/>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <Link to={`/${list.id}/edit`}>
+                      <DropdownMenuItem>
+                        Edit
+                      </DropdownMenuItem>
+                    </Link>
+                    <DropdownItemDelete onDelete={() => submitDeleteShoppingList(list.id)}/>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </TableCell>
             </TableRow>
           ))}

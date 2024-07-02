@@ -17,7 +17,7 @@ type CreateShoppingListItemParams = {
 }
 
 export type ShoppingList = {
-  id: string
+  id: number
   name: string
   createdAt: Date
 }
@@ -82,7 +82,7 @@ export async function updateShoppingListItem(
   return tx.done
 }
 
-export async function deleteShoppingList(id: string) {
+export async function deleteShoppingList(id: number) {
   const db = await getDb()
   const tx = db.transaction('shopping-lists', 'readwrite')
 

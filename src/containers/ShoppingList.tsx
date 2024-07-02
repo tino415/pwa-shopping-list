@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 
 import {
   getShoppingList,
@@ -7,10 +7,12 @@ import {
   listShoppingListItems,
   type ShoppingListItem,
   deleteShoppingListItem,
+  deleteShoppingList
 } from '../lib/db'
 
-import { Button, buttonVariants } from '../components/ui/Button'
-import ButtonDelete from '../components/ui/ButtonDelete'
+import { EllipsisVertical } from 'lucide-react'
+
+import DropdownItemDelete from '../components/ui/DropdownItemDelete'
 
 import {
   Table,
@@ -31,10 +33,19 @@ import {
   BreadcrumbSeparator,
 } from '../components/ui/Breadcrumb'
 
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from '../components/ui/DropdownMenu'
+
 import LinkNew from '../components/ui/LinkNew'
 import LinkEdit from '../components/ui/LinkEdit'
+import ButtonDelete from '../components/ui/ButtonDelete'
 
 function ShoppingList() {
+  const navigate = useNavigate()
   const { id } = useParams()
   const [shoppingList, setShoppingList] = useState<List | null>(null)
   const [shoppingListItems, setShoppingListItems] = useState<
@@ -62,6 +73,12 @@ function ShoppingList() {
     })
   }
 
+  async function submitDeleteShoppingList(id: number) {
+    deleteShoppingList(id).then(() => {
+      navigate("/")
+    })
+  }
+
   if (shoppingList) {
     return (
       <>
@@ -78,6 +95,7 @@ function ShoppingList() {
         </Breadcrumb>
         <LinkNew to={`/${shoppingList.id}/new`}/>
         <LinkEdit to={`/${shoppingList.id}/edit`}/>
+        <ButtonDelete onDelete={() => submitDeleteShoppingList(shoppingList.id)}/>
         <ul>
           <li>{shoppingList.id}</li>
           <li>{shoppingList.name}</li>
@@ -95,10 +113,19 @@ function ShoppingList() {
               <TableRow key={item.id}>
                 <TableCell className="font-medium">{item.name}</TableCell>
                 <TableCell className="text-right">
-                  <Link className={buttonVariants()} to={`/${shoppingList.id}/${item.id}/edit`}>
-                    Edit
-                  </Link>
-                  <ButtonDelete onDelete={() => submitDeleteShoppingListItem(item.id)}/>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
+                      <EllipsisVertical/>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <Link to={`/${shoppingList.id}/${item.id}/edit`}>
+                        <DropdownMenuItem>
+                          Edit
+                        </DropdownMenuItem>
+                      </Link>
+                      <DropdownItemDelete onDelete={() => submitDeleteShoppingListItem(item.id)}/>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </TableCell>
               </TableRow>
             ))}
