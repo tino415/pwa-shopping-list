@@ -36,9 +36,7 @@ export async function createShoppingList({ name }: CreateShoppingListParams) {
   }
 
   const db = await getDb()
-  const tx = db.transaction('shopping-lists', 'readwrite')
-  tx.objectStore('shopping-lists').add(shoppingList)
-  return tx.done
+  return db.add('shopping-lists', shoppingList)
 }
 
 export async function createShoppingListItem({
@@ -52,86 +50,61 @@ export async function createShoppingListItem({
   }
 
   const db = await getDb()
-  const tx = db.transaction('shopping-list-items', 'readwrite')
-  tx.objectStore('shopping-list-items').add(shoppingListItem)
-  return tx.done
+  return db.add('shopping-list-items', shoppingListItem)
 }
 
-export async function updateShoppingList({
-  id,
-  name,
-}: UpdateShoppingListParams) {
-  const shoppingList = {
-    id: parseInt(id),
-    name,
-    createdAt: new Date(),
-  }
-
+export async function updateShoppingList(shoppingList : ShoppingList) {  
   const db = await getDb()
-  const tx = db.transaction('shopping-lists', 'readwrite')
-  tx.store.put(shoppingList)
-  return tx.done
+  return db.put('shopping-lists', shoppingList)
 }
 
-export async function updateShoppingListItem(
-  shoppingListItem: ShoppingListItem,
-) {
+export async function updateShoppingListItem(shoppingListItem: ShoppingListItem) {
   const db = await getDb()
-  const tx = db.transaction('shopping-list-items', 'readwrite')
-  tx.store.put(shoppingListItem)
-  return tx.done
+  return db.put('shopping-list-items', shoppingListItem)
 }
 
 export async function deleteShoppingList(id: number) {
   const db = await getDb()
-  const tx = db.transaction('shopping-lists', 'readwrite')
+  const tx = db.transaction(['shopping-lists', 'shopping-list-items'], 'readwrite')
 
-  tx.store.delete(id)
+  tx.objectStore('shopping-lists').delete(id)
 
-  const txitems = db.transaction('shopping-list-items', 'readwrite')
-  const index = txitems.store.index('shopping-list-items-shopping-list')
+  const index = tx.objectStore('shopping-list-items').index('shopping-list-items-shopping-list')
 
   for await (const cursor of index.iterate(id)) {
     cursor.delete()
   }
 
-  return Promise.all([tx.done, txitems.done])
+  return tx.done
 }
 
 export async function deleteShoppingListItem(id: number) {
   const db = await getDb()
-  const tx = db.transaction('shopping-list-items', 'readwrite')
-  tx.store.delete(id)
-  return tx.done
+  return db.delete('shopping-list-items', id)
 }
 
 export async function listShoppingLists(): Promise<ShoppingList[]> {
   const db = await getDb()
-  return db.transaction('shopping-lists').store.getAll()
+  return db.getAll('shopping-lists')
 }
 
 export async function listShoppingListItems(
   shoppingListId: number,
 ): Promise<ShoppingListItem[]> {
   const db = await getDb()
-  const items = await db
-    .transaction('shopping-list-items')
-    .store.index('shopping-list-items-shopping-list')
-    .getAll(shoppingListId)
-  console.log(items)
-  return items
+  return db.getAllFromIndex('shopping-list-items', 'shopping-list-items-shopping-list', shoppingListId)
 }
 
 export async function getShoppingList(id: number): Promise<ShoppingList> {
   const db = await getDb()
-  return db.transaction('shopping-lists').store.get(id)
+  return db.get('shopping-lists', id)
 }
 
 export async function getShoppingListItem(
   id: number,
 ): Promise<ShoppingListItem> {
   const db = await getDb()
-  return db.transaction('shopping-list-items').store.get(id)
+  return db.get('shopping-list-items', id)
 }
 
 async function getDb() {

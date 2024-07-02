@@ -34,8 +34,8 @@ function EditShoppingList() {
   }, [id])
 
   function onSubmit(values: InputData) {
-    if (id) {
-      updateShoppingList({ ...values, id })
+    if (shoppingList) {
+      updateShoppingList({ ...shoppingList, ...values })
       navigate(`/${id}`)
     }
   }
