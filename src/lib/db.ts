@@ -6,11 +6,6 @@ type CreateShoppingListParams = {
   name: string
 }
 
-type UpdateShoppingListParams = {
-  id: string
-  name: string
-}
-
 type CreateShoppingListItemParams = {
   name: string
   shoppingListId: number
@@ -87,7 +82,9 @@ export async function deleteShoppingListItem(id: number) {
 
 export async function listShoppingLists(): Promise<ShoppingList[]> {
   const db = await getDb()
-  return db.getAll('shopping-lists')
+  const items = await db.getAll('shopping-lists')
+
+  return items.reverse()
 }
 
 export async function listShoppingListItems(
