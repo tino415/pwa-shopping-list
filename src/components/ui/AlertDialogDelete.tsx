@@ -12,14 +12,18 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "./AlertDialog"
+} from './AlertDialog'
 
-export default function({children, onDelete} : {children : React.ReactNode, onDelete : () => void}) {
+export default function ({
+  children,
+  onDelete,
+}: {
+  children: React.ReactNode
+  onDelete: () => void
+}) {
   return (
     <AlertDialog>
-      <AlertDialogTrigger asChild>
-        {children}
-      </AlertDialogTrigger>
+      <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>

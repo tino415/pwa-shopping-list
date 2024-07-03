@@ -4,7 +4,9 @@ import { createShoppingList } from '../lib/db'
 
 import LinkCancel from '../components/ui/LinkCancel'
 
-import ShoppingListForm, { type InputData } from '../components/ShoppingListForm'
+import ShoppingListForm, {
+  type InputData,
+} from '../components/ShoppingListForm'
 
 import {
   Breadcrumb,
@@ -41,9 +43,7 @@ function NewShoppingList() {
 
       <Header name="Add new shopping list"></Header>
 
-      <ShoppingListForm onSubmit={onSubmit}/>
-
-      <LinkCancel to="/"/>
+      <ShoppingListForm onSubmit={onSubmit} cancelLink="/" />
     </>
   )
 }

@@ -20,7 +20,9 @@ import {
   BreadcrumbSeparator,
 } from '../components/ui/Breadcrumb'
 
-import ShoppingListItemForm, { InputData } from '../components/ShoppingListItemForm'
+import ShoppingListItemForm, {
+  InputData,
+} from '../components/ShoppingListItemForm'
 
 function EditShoppingListItem() {
   const navigate = useNavigate()
@@ -57,7 +59,9 @@ function EditShoppingListItem() {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-            <BreadcrumbLink href={`/${shoppingList.id}`}>{shoppingList.name}</BreadcrumbLink>
+              <BreadcrumbLink href={`/${shoppingList.id}`}>
+                {shoppingList.name}
+              </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
@@ -68,9 +72,11 @@ function EditShoppingListItem() {
 
         <h1>{shoppingList.name} item</h1>
 
-        <ShoppingListItemForm shoppingListItem={shoppingListItem} onSubmit={onSubmit}/>
-
-        <LinkCancel to={`/${shoppingListId}`}/>
+        <ShoppingListItemForm
+          shoppingListItem={shoppingListItem}
+          onSubmit={onSubmit}
+          cancelLink={`/${shoppingListId}`}
+        />
       </>
     )
   } else {

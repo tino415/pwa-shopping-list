@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import { EllipsisVertical } from 'lucide-react'
-
 import Actions, { ActionLink, ActionDelete } from '../components/ui/Actions'
 
 import {
@@ -23,19 +21,11 @@ import {
 } from '../components/ui/Breadcrumb'
 
 import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from '../components/ui/DropdownMenu'
-
-import {
   listShoppingLists,
   deleteShoppingList,
   type ShoppingList,
 } from '../lib/db'
 
-import DropdownItemDelete from '../components/ui/DropdownItemDelete'
 import Header from '../components/ui/Header'
 
 function ShoppingLists() {
@@ -57,40 +47,45 @@ function ShoppingLists() {
 
   return (
     <>
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbPage>Home</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+      <div className="p-2">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbPage>Home</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      </div>
       <Header name="">
-        <Actions actions={[ActionLink('/new', 'New')]}/>
+        <Actions actions={[ActionLink('/new', 'New')]} />
       </Header>
-      <Table>
-        <TableCaption>Your shopping lists</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {shoppingLists.map((list) => (
-            <TableRow key={list.id}>
-              <TableCell className="font-medium">
-                <Link to={`/${list.id}`}>{list.name}</Link>
-              </TableCell>
-              <TableCell className="text-right">
-                <Actions actions={[
-                  ActionLink(`/${list.id}/edit`, 'Edit'),
-                  ActionDelete(() => submitDeleteShoppingList(list.id)),
-                ]}/>
-              </TableCell>
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {shoppingLists.map((list) => (
+              <TableRow key={list.id}>
+                <TableCell className="font-medium">
+                  <Link to={`/${list.id}`}>{list.name}</Link>
+                </TableCell>
+                <TableCell className="text-right">
+                  <Actions
+                    actions={[
+                      ActionLink(`/${list.id}/edit`, 'Edit'),
+                      ActionDelete(() => submitDeleteShoppingList(list.id)),
+                    ]}
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </>
   )
 }

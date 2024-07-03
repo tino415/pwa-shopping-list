@@ -15,21 +15,23 @@ import {
 } from './DropdownMenu'
 
 type Action = {
-  renderDropdown : (index : number) => React.ReactNode
-  renderButton : (index : number) => React.ReactNode
+  renderDropdown: (index: number) => React.ReactNode
+  renderButton: (index: number) => React.ReactNode
 }
 
-export default function Actions(props : {actions : Action[]}) {
+export default function Actions(props: { actions: Action[] }) {
   if (props.actions.length > 1) {
     return (
       <>
         <div className="sm:hidden">
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <EllipsisVertical/>
+              <EllipsisVertical />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              {props.actions.map((action, index) => action.renderDropdown(index))}
+              {props.actions.map((action, index) =>
+                action.renderDropdown(index),
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -44,24 +46,32 @@ export default function Actions(props : {actions : Action[]}) {
   }
 }
 
-export function ActionLink(to : string, text : string) {
+export function ActionLink(to: string, text: string) {
   return {
-    renderDropdown: (index : number) => {
-      return <DropdownItemLink key={index} to={to}>{text}</DropdownItemLink>
+    renderDropdown: (index: number) => {
+      return (
+        <DropdownItemLink key={index} to={to}>
+          {text}
+        </DropdownItemLink>
+      )
     },
-    renderButton: (index : number) => {
-      return <LinkButton key={index} to={to} >{text}</LinkButton>
+    renderButton: (index: number) => {
+      return (
+        <LinkButton key={index} to={to}>
+          {text}
+        </LinkButton>
+      )
     },
   }
 }
 
-export function ActionDelete(onDelete : () => void) {
+export function ActionDelete(onDelete: () => void) {
   return {
-    renderDropdown: (index : number) => {
-      return <DropdownItemDelete key={index} onDelete={onDelete}/>
+    renderDropdown: (index: number) => {
+      return <DropdownItemDelete key={index} onDelete={onDelete} />
     },
-    renderButton: (index : number) => {
-      return <ButtonDelete key={index} onDelete={onDelete}/>
+    renderButton: (index: number) => {
+      return <ButtonDelete key={index} onDelete={onDelete} />
     },
   }
 }

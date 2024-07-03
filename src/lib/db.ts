@@ -50,23 +50,30 @@ export async function createShoppingListItem({
   return db.add('shopping-list-items', shoppingListItem)
 }
 
-export async function updateShoppingList(shoppingList : ShoppingList) {  
+export async function updateShoppingList(shoppingList: ShoppingList) {
   const db = await getDb()
   return db.put('shopping-lists', shoppingList)
 }
 
-export async function updateShoppingListItem(shoppingListItem: ShoppingListItem) {
+export async function updateShoppingListItem(
+  shoppingListItem: ShoppingListItem,
+) {
   const db = await getDb()
   return db.put('shopping-list-items', shoppingListItem)
 }
 
 export async function deleteShoppingList(id: number) {
   const db = await getDb()
-  const tx = db.transaction(['shopping-lists', 'shopping-list-items'], 'readwrite')
+  const tx = db.transaction(
+    ['shopping-lists', 'shopping-list-items'],
+    'readwrite',
+  )
 
   tx.objectStore('shopping-lists').delete(id)
 
-  const index = tx.objectStore('shopping-list-items').index('shopping-list-items-shopping-list')
+  const index = tx
+    .objectStore('shopping-list-items')
+    .index('shopping-list-items-shopping-list')
 
   for await (const cursor of index.iterate(id)) {
     cursor.delete()
@@ -91,7 +98,11 @@ export async function listShoppingListItems(
   shoppingListId: number,
 ): Promise<ShoppingListItem[]> {
   const db = await getDb()
-  return db.getAllFromIndex('shopping-list-items', 'shopping-list-items-shopping-list', shoppingListId)
+  return db.getAllFromIndex(
+    'shopping-list-items',
+    'shopping-list-items-shopping-list',
+    shoppingListId,
+  )
 }
 
 export async function getShoppingList(id: number): Promise<ShoppingList> {

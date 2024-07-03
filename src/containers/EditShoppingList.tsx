@@ -18,7 +18,9 @@ import {
   BreadcrumbSeparator,
 } from '../components/ui/Breadcrumb'
 
-import ShoppingListForm, { type InputData } from '../components/ShoppingListForm'
+import ShoppingListForm, {
+  type InputData,
+} from '../components/ShoppingListForm'
 import Header from '../components/ui/Header'
 
 function EditShoppingList() {
@@ -51,7 +53,9 @@ function EditShoppingList() {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-            <BreadcrumbLink href={`/${shoppingList.id}`}>{shoppingList.name}</BreadcrumbLink>
+              <BreadcrumbLink href={`/${shoppingList.id}`}>
+                {shoppingList.name}
+              </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
@@ -62,9 +66,11 @@ function EditShoppingList() {
 
         <Header name={`Edit shopping list ${shoppingList.name}`}></Header>
 
-        <ShoppingListForm shoppingList={shoppingList} onSubmit={onSubmit}/>
-
-        <LinkCancel to={`/${shoppingList.id}`}/>
+        <ShoppingListForm
+          shoppingList={shoppingList}
+          onSubmit={onSubmit}
+          cancelLink={`/${shoppingList.id}`}
+        />
       </>
     )
   } else {

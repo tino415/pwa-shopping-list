@@ -8,20 +8,14 @@ import {
   type ShoppingListItem,
   deleteShoppingListItem,
   deleteShoppingList,
-  updateShoppingListItem
+  updateShoppingListItem,
 } from '../lib/db'
-
-import { EllipsisVertical } from 'lucide-react'
-
-import DropdownItemDelete from '../components/ui/DropdownItemDelete'
-import DropdownItemLink from '../components/ui/DropdownItemLink'
 
 import Actions, { ActionLink, ActionDelete } from '../components/ui/Actions'
 
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -78,17 +72,17 @@ function ShoppingList() {
 
   async function submitDeleteShoppingList(id: number) {
     deleteShoppingList(id).then(() => {
-      navigate("/")
+      navigate('/')
     })
   }
 
-  async function toggle(item : ShoppingListItem) {
-    await updateShoppingListItem({...item, checked: !item.checked})
+  async function toggle(item: ShoppingListItem) {
+    await updateShoppingListItem({ ...item, checked: !item.checked })
     const items = await listShoppingListItems(item.shoppingListId)
     setShoppingListItems(items)
   }
 
-  const strikeText = (is_striked : boolean, text : string) => {
+  const strikeText = (is_striked: boolean, text: string) => {
     if (is_striked) {
       return <span className="line-through">{text}</span>
     } else {
@@ -111,40 +105,51 @@ function ShoppingList() {
           </BreadcrumbList>
         </Breadcrumb>
         <Header name={shoppingList.name}>
-          <Actions actions={[
-            ActionLink(`/${shoppingList.id}/new`, 'New'),
-            ActionLink(`/${shoppingList.id}/edit`, 'Edit'),
-            ActionDelete(() => submitDeleteShoppingList(shoppingList.id)),
-          ]}/>
+          <Actions
+            actions={[
+              ActionLink(`/${shoppingList.id}/new`, 'New'),
+              ActionLink(`/${shoppingList.id}/edit`, 'Edit'),
+              ActionDelete(() => submitDeleteShoppingList(shoppingList.id)),
+            ]}
+          />
         </Header>
-        <Table>
-          <TableCaption>Shopping list items</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-8"></TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {shoppingListItems.map((item) => (
-              <TableRow key={item.id}>
-                <TableCell>
-                  <Checkbox checked={item.checked} onCheckedChange={() => toggle(item)}/>
-                </TableCell>
-                <TableCell>
-                  {strikeText(item.checked, item.name)}
-                </TableCell>
-                <TableCell className="text-right">
-                  <Actions actions={[
-                    ActionLink(`/${shoppingList.id}/${item.id}/edit`, 'Edit'),
-                    ActionDelete(() => submitDeleteShoppingListItem(item.id))
-                  ]}/>
-                </TableCell>
+        <div className="rounded-md border">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-8"></TableHead>
+                <TableHead>Name</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {shoppingListItems.map((item) => (
+                <TableRow key={item.id}>
+                  <TableCell>
+                    <Checkbox
+                      checked={item.checked}
+                      onCheckedChange={() => toggle(item)}
+                    />
+                  </TableCell>
+                  <TableCell>{strikeText(item.checked, item.name)}</TableCell>
+                  <TableCell className="text-right">
+                    <Actions
+                      actions={[
+                        ActionLink(
+                          `/${shoppingList.id}/${item.id}/edit`,
+                          'Edit',
+                        ),
+                        ActionDelete(() =>
+                          submitDeleteShoppingListItem(item.id),
+                        ),
+                      ]}
+                    />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </>
     )
   } else {

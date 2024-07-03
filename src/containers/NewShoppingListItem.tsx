@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
-import ShoppingListItemForm, { type InputData } from '../components/ShoppingListItemForm'
+import ShoppingListItemForm, {
+  type InputData,
+} from '../components/ShoppingListItemForm'
 
 import {
   createShoppingListItem,
@@ -52,7 +54,9 @@ function NewShoppingListItem() {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-            <BreadcrumbLink href={`/${shoppingList.id}`}>{shoppingList.name}</BreadcrumbLink>
+              <BreadcrumbLink href={`/${shoppingList.id}`}>
+                {shoppingList.name}
+              </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
@@ -61,11 +65,11 @@ function NewShoppingListItem() {
           </BreadcrumbList>
         </Breadcrumb>
 
-        <Header name={`Add new shopping list item to ${shoppingList.name}`}></Header>
+        <Header
+          name={`Add new shopping list item to ${shoppingList.name}`}
+        ></Header>
 
-        <ShoppingListItemForm onSubmit={onSubmit}/>
-
-        <LinkCancel to={`/${id}`}/>
+        <ShoppingListItemForm onSubmit={onSubmit} cancelLink={`/${id}`} />
       </>
     )
   } else {

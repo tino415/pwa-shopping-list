@@ -18,13 +18,15 @@ import {
 import { Input } from './ui/Input'
 
 import { Button } from './ui/Button'
-
+import LinkButton from './ui/LinkButton'
+import LinkCancel from './ui/LinkCancel'
 
 export type InputData = z.infer<typeof formSchema>
 
 type Properties = {
-  shoppingList? : ShoppingList,
-  onSubmit : SubmitHandler<InputData>
+  cancelLink: string
+  shoppingList?: ShoppingList
+  onSubmit: SubmitHandler<InputData>
 }
 
 const formSchema = z.object({
@@ -33,7 +35,7 @@ const formSchema = z.object({
   }),
 })
 
-export default function(properties : Properties) {
+export default function (properties: Properties) {
   const form = useForm<InputData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -47,7 +49,10 @@ export default function(properties : Properties) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(properties.onSubmit)} className="space-y-8">
+      <form
+        onSubmit={form.handleSubmit(properties.onSubmit)}
+        className="space-y-8"
+      >
         <FormField
           control={form.control}
           name="name"
@@ -57,14 +62,15 @@ export default function(properties : Properties) {
               <FormControl>
                 <Input placeholder="Groceries" {...field} />
               </FormControl>
-              <FormDescription>
-                Name of list
-              </FormDescription>
+              <FormDescription>Name of list</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <div className="flex flex-row gap-2">
+          <Button type="submit">Submit</Button>
+          <LinkCancel to={properties.cancelLink} />
+        </div>
       </form>
     </Form>
   )
