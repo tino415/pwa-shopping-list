@@ -3,10 +3,10 @@ import React from 'react'
 import { Button } from './Button'
 import AlertDialogDelete from './AlertDialogDelete'
 
-export default function({onDelete} : {onDelete : () => void}) {
+export default function(props : {onDelete : () => void, className?: string}) {
   return (
-    <AlertDialogDelete onDelete={onDelete}>
-      <Button variant="destructive">
+    <AlertDialogDelete onDelete={props.onDelete}>
+      <Button variant="destructive" className={props.className}>
         Delete
       </Button>
     </AlertDialogDelete>

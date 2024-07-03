@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 
 import { EllipsisVertical } from 'lucide-react'
 
+import Actions, { ActionLink, ActionDelete } from '../components/ui/Actions'
+
 import {
   Table,
   TableBody,
@@ -26,8 +28,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from '../components/ui/DropdownMenu'
-
-import LinkNew from '../components/ui/LinkNew'
 
 import {
   listShoppingLists,
@@ -65,7 +65,7 @@ function ShoppingLists() {
         </BreadcrumbList>
       </Breadcrumb>
       <Header name="">
-        <LinkNew to={'/new'}/>
+        <Actions actions={[ActionLink('/new', 'New')]}/>
       </Header>
       <Table>
         <TableCaption>Your shopping lists</TableCaption>
@@ -82,19 +82,10 @@ function ShoppingLists() {
                 <Link to={`/${list.id}`}>{list.name}</Link>
               </TableCell>
               <TableCell className="text-right">
-                <DropdownMenu>
-                  <DropdownMenuTrigger>
-                    <EllipsisVertical/>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <Link to={`/${list.id}/edit`}>
-                      <DropdownMenuItem>
-                        Edit
-                      </DropdownMenuItem>
-                    </Link>
-                    <DropdownItemDelete onDelete={() => submitDeleteShoppingList(list.id)}/>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <Actions actions={[
+                  ActionLink(`/${list.id}/edit`, 'Edit'),
+                  ActionDelete(() => submitDeleteShoppingList(list.id)),
+                ]}/>
               </TableCell>
             </TableRow>
           ))}

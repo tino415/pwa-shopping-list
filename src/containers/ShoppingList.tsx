@@ -7,12 +7,16 @@ import {
   listShoppingListItems,
   type ShoppingListItem,
   deleteShoppingListItem,
-  deleteShoppingList
+  deleteShoppingList,
+  updateShoppingListItem
 } from '../lib/db'
 
 import { EllipsisVertical } from 'lucide-react'
 
 import DropdownItemDelete from '../components/ui/DropdownItemDelete'
+import DropdownItemLink from '../components/ui/DropdownItemLink'
+
+import Actions, { ActionLink, ActionDelete } from '../components/ui/Actions'
 
 import {
   Table,
@@ -40,10 +44,8 @@ import {
   DropdownMenuItem,
 } from '../components/ui/DropdownMenu'
 
-import LinkNew from '../components/ui/LinkNew'
-import LinkEdit from '../components/ui/LinkEdit'
-import ButtonDelete from '../components/ui/ButtonDelete'
 import Header from '../components/ui/Header'
+import { Checkbox } from '../components/ui/Checkbox'
 
 function ShoppingList() {
   const navigate = useNavigate()
@@ -80,6 +82,20 @@ function ShoppingList() {
     })
   }
 
+  async function toggle(item : ShoppingListItem) {
+    await updateShoppingListItem({...item, checked: !item.checked})
+    const items = await listShoppingListItems(item.shoppingListId)
+    setShoppingListItems(items)
+  }
+
+  const strikeText = (is_striked : boolean, text : string) => {
+    if (is_striked) {
+      return <span className="line-through">{text}</span>
+    } else {
+      return <span>{text}</span>
+    }
+  }
+
   if (shoppingList) {
     return (
       <>
@@ -95,14 +111,17 @@ function ShoppingList() {
           </BreadcrumbList>
         </Breadcrumb>
         <Header name={shoppingList.name}>
-          <LinkNew to={`/${shoppingList.id}/new`}/>
-          <LinkEdit to={`/${shoppingList.id}/edit`}/>
-          <ButtonDelete onDelete={() => submitDeleteShoppingList(shoppingList.id)}/>
+          <Actions actions={[
+            ActionLink(`/${shoppingList.id}/new`, 'New'),
+            ActionLink(`/${shoppingList.id}/edit`, 'Edit'),
+            ActionDelete(() => submitDeleteShoppingList(shoppingList.id)),
+          ]}/>
         </Header>
         <Table>
           <TableCaption>Shopping list items</TableCaption>
           <TableHeader>
             <TableRow>
+              <TableHead className="w-8"></TableHead>
               <TableHead>Name</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
@@ -110,21 +129,17 @@ function ShoppingList() {
           <TableBody>
             {shoppingListItems.map((item) => (
               <TableRow key={item.id}>
-                <TableCell className="font-medium">{item.name}</TableCell>
+                <TableCell>
+                  <Checkbox checked={item.checked} onCheckedChange={() => toggle(item)}/>
+                </TableCell>
+                <TableCell>
+                  {strikeText(item.checked, item.name)}
+                </TableCell>
                 <TableCell className="text-right">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger>
-                      <EllipsisVertical/>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <Link to={`/${shoppingList.id}/${item.id}/edit`}>
-                        <DropdownMenuItem>
-                          Edit
-                        </DropdownMenuItem>
-                      </Link>
-                      <DropdownItemDelete onDelete={() => submitDeleteShoppingListItem(item.id)}/>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <Actions actions={[
+                    ActionLink(`/${shoppingList.id}/${item.id}/edit`, 'Edit'),
+                    ActionDelete(() => submitDeleteShoppingListItem(item.id))
+                  ]}/>
                 </TableCell>
               </TableRow>
             ))}

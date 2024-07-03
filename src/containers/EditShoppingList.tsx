@@ -19,6 +19,7 @@ import {
 } from '../components/ui/Breadcrumb'
 
 import ShoppingListForm, { type InputData } from '../components/ShoppingListForm'
+import Header from '../components/ui/Header'
 
 function EditShoppingList() {
   const navigate = useNavigate()
@@ -58,6 +59,8 @@ function EditShoppingList() {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
+
+        <Header name={`Edit shopping list ${shoppingList.name}`}></Header>
 
         <ShoppingListForm shoppingList={shoppingList} onSubmit={onSubmit}/>
 

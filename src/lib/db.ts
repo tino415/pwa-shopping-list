@@ -26,12 +26,14 @@ export type ShoppingListItem = {
   id: number
   shoppingListId: number
   name: string
+  checked: boolean
   createdAt: Date
 }
 
 export async function createShoppingList({ name }: CreateShoppingListParams) {
   const shoppingList = {
     name,
+    checked: false,
     createdAt: new Date(),
   }
 
