@@ -21,6 +21,7 @@ export type ShoppingListItem = {
   id: number
   shoppingListId: number
   name: string
+  ngram: null | string[]
   checked: boolean
   createdAt: Date
 }
@@ -43,6 +44,7 @@ export async function createShoppingListItem({
   const shoppingListItem = {
     name,
     shoppingListId: shoppingListId,
+    ngram: createNgram(name),
     createdAt: new Date(),
   }
 
@@ -58,8 +60,9 @@ export async function updateShoppingList(shoppingList: ShoppingList) {
 export async function updateShoppingListItem(
   shoppingListItem: ShoppingListItem,
 ) {
+  const newShoppingListItem = {...shoppingListItem, ngram: createNgram(shoppingListItem.name)}
   const db = await getDb()
-  return db.put('shopping-list-items', shoppingListItem)
+  return db.put('shopping-list-items', newShoppingListItem)
 }
 
 export async function deleteShoppingList(id: number) {
@@ -105,6 +108,26 @@ export async function listShoppingListItems(
   )
 }
 
+export async function searchShoppingListItems(rawQuery : string) : Promise<ShoppingListItem[]>{
+  const query = normalize(rawQuery)
+  const db = await getDb()
+  const items = await db.getAllFromIndex(
+    'shopping-list-items',
+    'shopping-list-items-name-ngrams',
+    query
+  )
+  const uniq = new Set()
+
+  return items.filter((item : ShoppingListItem) => {
+    if (uniq.has(item.name)) {
+      return false
+    } else {
+      uniq.add(item.name)
+      return true
+    }
+  })
+}
+
 export async function getShoppingList(id: number): Promise<ShoppingList> {
   const db = await getDb()
   return db.get('shopping-lists', id)
@@ -119,8 +142,8 @@ export async function getShoppingListItem(
 
 async function getDb() {
   if (db === null) {
-    db = await openDB('shopping_planner', 2, {
-      upgrade(db, oldVersion, _newVersion, transaction) {
+    db = await openDB('shopping_planner', 7, {
+      async upgrade(db, oldVersion, newVersion, transaction) {
         if (oldVersion < 1) {
           db.createObjectStore('shopping-lists', {
             autoIncrement: true,
@@ -142,9 +165,46 @@ async function getDb() {
             'shoppingListId',
           )
         }
+
+        // newVersion >= 3 - so I can develop this file without applying half baked
+        // migrations
+        if (oldVersion <= 7) {
+          const shoppingListItemStore = transaction.objectStore('shopping-list-items')
+
+          shoppingListItemStore.createIndex(
+            'shopping-list-items-name-ngrams',
+            'ngram',
+            {multiEntry: true}
+          )
+
+          for await (const cursor of shoppingListItemStore.iterate()) {
+            const item : ShoppingListItem = cursor.value
+            await cursor.update({...item, ngram: createNgram(item.name)})
+          }
+        }
       },
     })
   }
 
   return db
+}
+
+function createNgram(text : string) {
+  const segmenter = new Intl.Segmenter()
+  const segments = Array.from(segmenter.segment(text))
+  const ngram : string[] = []
+
+  let current = ""
+
+  for (const segment of segments) {
+    const char = normalize(segment.segment)
+    current = current + char
+    ngram.push(current)
+  }
+
+  return ngram
+}
+
+function normalize(text : string) {
+  return text.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase()
 }

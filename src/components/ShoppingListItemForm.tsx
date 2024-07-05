@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { type SubmitHandler, useForm } from 'react-hook-form'
+import { type SubmitHandler, type WatchObserver, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { type ShoppingListItem } from '../lib/db'
@@ -26,6 +26,7 @@ type Properties = {
   shoppingListItem?: ShoppingListItem
   cancelLink: string
   onSubmit: SubmitHandler<InputData>
+  onChange?: WatchObserver<InputData>
 }
 
 const formSchema = z.object({
@@ -46,6 +47,15 @@ export default function (properties: Properties) {
     form.setValue('name', properties.shoppingListItem.name)
   }
 
+  if (properties.onChange !== undefined) {
+    useEffect(() => {
+      if (properties.onChange) {
+        const subscription = form.watch(properties.onChange)
+        return () => subscription.unsubscribe()
+      }
+    }, [form.watch])
+  }
+
   return (
     <Form {...form}>
       <form
@@ -59,7 +69,7 @@ export default function (properties: Properties) {
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="Tomatoes" {...field} />
+              <Input placeholder="Tomatoes" {...field}/>
               </FormControl>
               <FormDescription>Name of item to add to list</FormDescription>
               <FormMessage />
