@@ -12,7 +12,7 @@ import EditShoppingListItem from './containers/EditShoppingListItem'
 function App() {
   return (
     <Router>
-      <div className="container mx-auto">
+      <div className="container py-2 xl:max-w-5xl">
         <Routes>
           <Route path="/" Component={ShoppingLists} />
           <Route path="/new" Component={NewShoppingList} />

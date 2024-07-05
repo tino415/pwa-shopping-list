@@ -9,8 +9,6 @@ import {
   type ShoppingList,
 } from '../lib/db'
 
-import LinkCancel from '../components/ui/LinkCancel'
-
 import {
   Breadcrumb,
   BreadcrumbItem,
