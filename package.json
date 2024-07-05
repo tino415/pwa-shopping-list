@@ -49,7 +49,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "format": "prettier --config .prettierrc 'src/**/*.{tsx,ts}' --write",
-    "deploy": "npm run build && firebase deploy --onliny hosting"
+    "deploy": "npm run build && firebase deploy --only hosting"
   },
   "browserslist": {
     "production": [
