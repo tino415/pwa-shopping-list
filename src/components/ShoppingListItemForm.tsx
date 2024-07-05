@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { type SubmitHandler, type WatchObserver, useForm } from 'react-hook-form'
+import {
+  type SubmitHandler,
+  type WatchObserver,
+  useForm,
+} from 'react-hook-form'
 import { z } from 'zod'
 
 import { type ShoppingListItem } from '../lib/db'
@@ -69,7 +73,7 @@ export default function (properties: Properties) {
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-              <Input placeholder="Tomatoes" {...field}/>
+                <Input placeholder="Tomatoes" {...field} />
               </FormControl>
               <FormDescription>Name of item to add to list</FormDescription>
               <FormMessage />

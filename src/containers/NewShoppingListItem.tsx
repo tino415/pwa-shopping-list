@@ -14,7 +14,7 @@ import {
   listShoppingListItems,
   searchShoppingListItems,
   type ShoppingList as List,
-  type ShoppingListItem
+  type ShoppingListItem,
 } from '../lib/db'
 
 import {
@@ -34,8 +34,12 @@ function NewShoppingListItem() {
   const navigate = useNavigate()
   const { id } = useParams()
   const [shoppingList, setShoppingList] = useState<List | null>(null)
-  const [shoppingListItems, setShoppingListItems] = useState<ShoppingListItem[]>([])
-  const [recommendedItems, setRecommendedItems] = useState<ShoppingListItem[]>([])
+  const [shoppingListItems, setShoppingListItems] = useState<
+    ShoppingListItem[]
+  >([])
+  const [recommendedItems, setRecommendedItems] = useState<ShoppingListItem[]>(
+    [],
+  )
 
   useEffect(() => {
     if (id) {
@@ -55,21 +59,21 @@ function NewShoppingListItem() {
     }
   }
 
-  const onChange : WatchObserver<{name: string}> = (value, {name}) => {
+  const onChange: WatchObserver<{ name: string }> = (value, { name }) => {
     if (name == 'name' && value.name) {
       searchShoppingListItems(value.name).then(setRecommendedItems)
     }
   }
 
-  const addItem = async (name : string) => {
+  const addItem = async (name: string) => {
     if (id) {
-      await createShoppingListItem({name, shoppingListId: parseInt(id)})
+      await createShoppingListItem({ name, shoppingListId: parseInt(id) })
       const items = await listShoppingListItems(parseInt(id))
       setShoppingListItems(items)
     }
   }
 
-  const removeItem = async (removeId : number) => {
+  const removeItem = async (removeId: number) => {
     if (id) {
       await deleteShoppingListItem(removeId)
       const items = await listShoppingListItems(parseInt(id))
@@ -77,16 +81,19 @@ function NewShoppingListItem() {
     }
   }
 
-  const addRemoveShoppingListItem = (item : ShoppingListItem) => {
+  const addRemoveShoppingListItem = (item: ShoppingListItem) => {
     const oldItem = shoppingListItems.find((i) => i.name == item.name)
-    
+
     if (oldItem) {
-      return <Button onClick={() => removeItem(oldItem.id)} variant="destructive">Remove</Button>
+      return (
+        <Button onClick={() => removeItem(oldItem.id)} variant="destructive">
+          Remove
+        </Button>
+      )
     } else {
       return <Button onClick={() => addItem(item.name)}>Add</Button>
     }
   }
-
 
   if (shoppingList) {
     return (
@@ -113,12 +120,16 @@ function NewShoppingListItem() {
           name={`Add new shopping list item to ${shoppingList.name}`}
         ></Header>
 
-        <ShoppingListItemForm onSubmit={onSubmit} onChange={onChange} cancelLink={`/${id}`} />
+        <ShoppingListItemForm
+          onSubmit={onSubmit}
+          onChange={onChange}
+          cancelLink={`/${id}`}
+        />
 
         <div className="rounded-md border my-2">
           <Table>
             <TableBody>
-              {recommendedItems.map(item => (
+              {recommendedItems.map((item) => (
                 <TableRow key={item.id}>
                   <TableCell className="w-[60px]">
                     {addRemoveShoppingListItem(item)}
