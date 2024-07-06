@@ -48,17 +48,11 @@ export default function (properties: Properties) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: '',
-      quantity: 1,
-      unit: 'pieces',
+      name: properties.shoppingListItem?.name || '',
+      quantity: properties.shoppingListItem?.quantity || 1,
+      unit: properties.shoppingListItem?.unit || 'pieces',
     },
   })
-
-  if (properties.shoppingListItem) {
-    form.setValue('name', properties.shoppingListItem.name)
-    form.setValue('quantity', properties.shoppingListItem.quantity || 1)
-    form.setValue('unit', properties.shoppingListItem.unit || 'pieces')
-  }
 
   if (properties.onChange !== undefined) {
     useEffect(() => {

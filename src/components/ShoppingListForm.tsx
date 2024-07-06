@@ -39,13 +39,9 @@ export default function (properties: Properties) {
   const form = useForm<InputData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: '',
+      name: properties.shoppingList?.name || '',
     },
   })
-
-  if (properties.shoppingList) {
-    form.setValue('name', properties.shoppingList.name)
-  }
 
   return (
     <Form {...form}>
