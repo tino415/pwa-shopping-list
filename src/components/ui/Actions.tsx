@@ -5,7 +5,7 @@ import DropdownItemLink from './DropdownItemLink'
 import DropdownItemDelete from './DropdownItemDelete'
 import ButtonDelete from './ButtonDelete'
 
-import { EllipsisVertical } from 'lucide-react'
+import { Ellipsis } from 'lucide-react'
 
 import {
   DropdownMenu,
@@ -26,7 +26,7 @@ export default function Actions(props: { actions: Action[] }) {
         <div className="sm:hidden">
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <EllipsisVertical />
+              <Ellipsis />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               {props.actions.map((action, index) =>

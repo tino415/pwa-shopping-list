@@ -119,7 +119,9 @@ function ShoppingList() {
               <TableRow>
                 <TableHead className="w-8"></TableHead>
                 <TableHead>Name</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead className="text-right w-20">Qunatity</TableHead>
+                <TableHead className="w-10">Unit</TableHead>
+                <TableHead className="text-right w-20">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -132,6 +134,8 @@ function ShoppingList() {
                     />
                   </TableCell>
                   <TableCell>{strikeText(item.checked, item.name)}</TableCell>
+                  <TableCell className="text-right">{item.quantity}</TableCell>
+                  <TableCell>{item.unit}</TableCell>
                   <TableCell className="text-right">
                     <Actions
                       actions={[

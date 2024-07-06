@@ -22,6 +22,8 @@ export type ShoppingListItem = {
   shoppingListId: number
   name: string
   ngram: null | string[]
+  quantity: null | number
+  unit: null | string
   checked: boolean
   createdAt: Date
 }
@@ -37,14 +39,12 @@ export async function createShoppingList({ name }: CreateShoppingListParams) {
   return db.add('shopping-lists', shoppingList)
 }
 
-export async function createShoppingListItem({
-  name,
-  shoppingListId,
-}: CreateShoppingListItemParams) {
+export async function createShoppingListItem(
+  params: CreateShoppingListItemParams,
+) {
   const shoppingListItem = {
-    name,
-    shoppingListId: shoppingListId,
-    ngram: createNgram(name),
+    ...params,
+    ngram: createNgram(params.name),
     createdAt: new Date(),
   }
 

@@ -34,9 +34,14 @@ type Properties = {
 }
 
 const formSchema = z.object({
-  name: z.string().min(2, {
-    message: 'Name must be at least 2 characters.',
-  }),
+  name: z
+    .string()
+    .min(2, {
+      message: 'Name must be at least 2 characters.',
+    })
+    .max(512),
+  quantity: z.coerce.number().min(0).max(1000),
+  unit: z.string().min(1).max(10),
 })
 
 export default function (properties: Properties) {
@@ -44,11 +49,15 @@ export default function (properties: Properties) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
+      quantity: 1,
+      unit: 'pieces',
     },
   })
 
   if (properties.shoppingListItem) {
     form.setValue('name', properties.shoppingListItem.name)
+    form.setValue('quantity', properties.shoppingListItem.quantity || 1)
+    form.setValue('unit', properties.shoppingListItem.unit || 'pieces')
   }
 
   if (properties.onChange !== undefined) {
@@ -80,6 +89,39 @@ export default function (properties: Properties) {
             </FormItem>
           )}
         />
+
+        <FormField
+          control={form.control}
+          name="quantity"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Quantity</FormLabel>
+              <FormControl>
+                <Input type="number" placeholder="1" {...field} />
+              </FormControl>
+              <FormDescription>Count of items to buy</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="unit"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Unit</FormLabel>
+              <FormControl>
+                <Input placeholder="pieces" {...field} />
+              </FormControl>
+              <FormDescription>
+                Measurement unit of quantity of items to buy
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <div className="flex flex-row gap-2">
           <Button type="submit">Submit</Button>
           <LinkCancel to={properties.cancelLink} />
