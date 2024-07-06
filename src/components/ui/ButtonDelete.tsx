@@ -6,7 +6,7 @@ import AlertDialogDelete from './AlertDialogDelete'
 export default function (props: { onDelete: () => void; className?: string }) {
   return (
     <AlertDialogDelete onDelete={props.onDelete}>
-      <Button variant="destructive" className={props.className}>
+      <Button variant="ghost" className={props.className}>
         Delete
       </Button>
     </AlertDialogDelete>

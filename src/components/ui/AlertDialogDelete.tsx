@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Button } from './Button'
+import { Button, buttonVariants } from './Button'
 
 import {
   AlertDialog,
@@ -33,7 +33,12 @@ export default function ({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={onDelete}>Continue</AlertDialogAction>
+          <AlertDialogAction
+            onClick={onDelete}
+            className={buttonVariants({ variant: 'destructive' })}
+          >
+            Delete
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

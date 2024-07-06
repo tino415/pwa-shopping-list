@@ -40,6 +40,9 @@ import {
 
 import Header from '../components/ui/Header'
 import { Checkbox } from '../components/ui/Checkbox'
+import LinkButton from '../components/ui/LinkButton'
+import { Plus } from 'lucide-react'
+import CircularLink from '../components/ui/CircularLink'
 
 function ShoppingList() {
   const navigate = useNavigate()
@@ -92,7 +95,7 @@ function ShoppingList() {
 
   if (shoppingList) {
     return (
-      <>
+      <div className="flex flex-col h-full">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -113,48 +116,58 @@ function ShoppingList() {
             ]}
           />
         </Header>
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-8"></TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead className="text-right w-20">Qunatity</TableHead>
-                <TableHead className="w-10">Unit</TableHead>
-                <TableHead className="text-right w-20">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {shoppingListItems.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell>
-                    <Checkbox
-                      checked={item.checked}
-                      onCheckedChange={() => toggle(item)}
-                    />
-                  </TableCell>
-                  <TableCell>{strikeText(item.checked, item.name)}</TableCell>
-                  <TableCell className="text-right">{item.quantity}</TableCell>
-                  <TableCell>{item.unit}</TableCell>
-                  <TableCell className="text-right">
-                    <Actions
-                      actions={[
-                        ActionLink(
-                          `/${shoppingList.id}/${item.id}/edit`,
-                          'Edit',
-                        ),
-                        ActionDelete(() =>
-                          submitDeleteShoppingListItem(item.id),
-                        ),
-                      ]}
-                    />
-                  </TableCell>
+        <div className="grow">
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-8"></TableHead>
+                  <TableHead>Name</TableHead>
+                  <TableHead className="text-right w-20">Qunatity</TableHead>
+                  <TableHead className="w-10">Unit</TableHead>
+                  <TableHead className="text-right w-20"></TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {shoppingListItems.map((item) => (
+                  <TableRow key={item.id}>
+                    <TableCell>
+                      <Checkbox
+                        checked={item.checked}
+                        onCheckedChange={() => toggle(item)}
+                      />
+                    </TableCell>
+                    <TableCell>{strikeText(item.checked, item.name)}</TableCell>
+                    <TableCell className="text-right">
+                      {item.quantity}
+                    </TableCell>
+                    <TableCell>{item.unit}</TableCell>
+                    <TableCell className="text-right">
+                      <Actions
+                        actions={[
+                          ActionLink(
+                            `/${shoppingList.id}/${item.id}/edit`,
+                            'Edit',
+                          ),
+                          ActionDelete(() =>
+                            submitDeleteShoppingListItem(item.id),
+                          ),
+                        ]}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </div>
-      </>
+
+        <div className="flex items-center justify-center p-2 sm:hidden">
+          <CircularLink to={`/${shoppingList.id}/new`}>
+            <Plus />
+          </CircularLink>
+        </div>
+      </div>
     )
   } else {
     return <p>Loading</p>

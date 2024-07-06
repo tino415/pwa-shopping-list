@@ -1,9 +1,8 @@
 import React from 'react'
-
 import { Link } from 'react-router-dom'
 import { buttonVariants } from './Button'
 
-export default function ({
+export default function CircularLink({
   to,
   children,
 }: {
@@ -11,7 +10,7 @@ export default function ({
   children: React.ReactNode
 }) {
   return (
-    <Link className={buttonVariants({ variant: 'ghost' })} to={to}>
+    <Link className={buttonVariants({ size: 'icon' })} to={to}>
       {children}
     </Link>
   )

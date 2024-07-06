@@ -12,7 +12,7 @@ import EditShoppingListItem from './containers/EditShoppingListItem'
 function App() {
   return (
     <Router>
-      <div className="container py-2 xl:max-w-5xl">
+      <div className="sm:container py-2 px-1 lg:max-w-5xl h-full">
         <Routes>
           <Route path="/" Component={ShoppingLists} />
           <Route path="/new" Component={NewShoppingList} />

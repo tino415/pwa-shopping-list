@@ -90,37 +90,36 @@ export default function (properties: Properties) {
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="quantity"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Quantity</FormLabel>
-              <FormControl>
-                <Input type="number" placeholder="1" {...field} />
-              </FormControl>
-              <FormDescription>Count of items to buy</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="flex gap-2">
+          <FormField
+            control={form.control}
+            name="quantity"
+            render={({ field }) => (
+              <FormItem className="grow">
+                <FormLabel>Quantity</FormLabel>
+                <FormControl>
+                  <Input type="number" placeholder="1" {...field} />
+                </FormControl>
+                <FormDescription>Count of items to buy</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="unit"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Unit</FormLabel>
-              <FormControl>
-                <Input placeholder="pieces" {...field} />
-              </FormControl>
-              <FormDescription>
-                Measurement unit of quantity of items to buy
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="unit"
+            render={({ field }) => (
+              <FormItem className="w-20">
+                <FormLabel>Unit</FormLabel>
+                <FormControl>
+                  <Input placeholder="pieces" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         <div className="flex flex-row gap-2">
           <Button type="submit">Submit</Button>
